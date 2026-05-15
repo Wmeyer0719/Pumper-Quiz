@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AO Pumper Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+  :root {
+    --red: #c0392b;
+    --dark-red: #922b21;
+    --orange: #e67e22;
+    --black: #0d0d0d;
+    --dark: #1a1a1a;
+    --mid: #2c2c2c;
+    --light: #f0ece4;
+    --muted: #777;
+    --success: #27ae60;
+    --fail: #c0392b;
+    --blue: #2980b9;
+    --blue-light: #3498db;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--dark); color: var(--light); min-height: 100vh; }
+
+  header { background: var(--black); border-bottom: 3px solid var(--red); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+  .badge { background: var(--red); color: white; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; padding: 4px 10px; text-transform: uppercase; }
+  header h1 { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+  .header-score { margin-left: auto; font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--orange); letter-spacing: 1px; }
+
+  .nav-tabs { display: flex; background: var(--black); padding: 0 20px; border-bottom: 1px solid #333; overflow-x: auto; gap: 2px; }
+  .nav-tab { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 16px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .nav-tab:hover { color: var(--light); }
+  .nav-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+  main { padding: 20px; max-width: 960px; margin: 0 auto; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+
+  .btn { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; padding: 9px 18px; border: none; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--red); color: white; }
+  .btn-primary:hover { background: var(--dark-red); }
+  .btn-secondary { background: var(--mid); color: var(--light); border: 1px solid #444; }
+  .btn-secondary:hover { background: #3a3a3a; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-orange:hover { background: #d35400; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-blue:hover { background: #2471a3; }
+
+  .progress-wrap { background: #333; height: 4px; border-radius: 2px; margin-bottom: 16px; }
+  .progress-bar { height: 4px; background: var(--orange); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* FLASHCARDS */
+  .quiz-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .card-counter { font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--muted); letter-spacing: 1px; margin-bottom: 14px; }
+  .flashcard-wrap { perspective: 1200px; margin-bottom: 20px; cursor: pointer; }
+  .flashcard { position: relative; width: 100%; min-height: 190px; transform-style: preserve-3d; transition: transform 0.5s ease; }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; width: 100%; min-height: 190px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 28px; display: flex; flex-direction: column; justify-content: center; }
+  .card-front { background: var(--mid); border: 1px solid #444; border-left: 4px solid var(--red); }
+  .card-back { background: #1e3a2a; border: 1px solid #2d5a3d; border-left: 4px solid var(--success); transform: rotateY(180deg); }
+  .card-label { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .card-back .card-label { color: #5dade2; }
+  .card-text { font-size: 17px; line-height: 1.5; color: var(--light); }
+  .card-hint { margin-top: 16px; font-size: 12px; color: var(--muted); text-align: center; }
+  .card-nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .cat-select { background:#2c2c2c; color:#f0ece4; border:1px solid #444; padding:9px 12px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:1px; cursor:pointer; }
+
+  /* QUIZ */
+  .mc-question { background: var(--mid); border: 1px solid #444; border-left: 4px solid var(--orange); padding: 22px; margin-bottom: 16px; font-size: 16px; line-height: 1.5; }
+  .mc-options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+  .mc-option { background: var(--mid); border: 1px solid #444; padding: 12px 16px; cursor: pointer; font-size: 15px; color: var(--light); text-align: left; transition: all 0.15s; font-family: 'Source Sans 3', sans-serif; }
+  .mc-option:hover:not(:disabled) { background: #3a3a3a; border-color: var(--orange); }
+  .mc-option.correct { background: #1e3a2a; border-color: var(--success); color: #abebc6; }
+  .mc-option.incorrect { background: #3a1a1a; border-color: var(--fail); color: #f1948a; }
+  .mc-option:disabled { cursor: default; }
+  .mc-feedback { padding: 12px 16px; font-size: 14px; margin-bottom: 14px; display: none; }
+  .mc-feedback.show { display: block; }
+  .mc-feedback.correct { background: #1e3a2a; border-left: 3px solid var(--success); color: #abebc6; }
+  .mc-feedback.incorrect { background: #3a1a1a; border-left: 3px solid var(--fail); color: #f1948a; }
+  .score-card { background: var(--mid); border: 1px solid #444; padding: 32px; text-align: center; margin-bottom: 20px; }
+  .score-big { font-family: 'Oswald', sans-serif; font-size: 72px; font-weight: 700; color: var(--orange); line-height: 1; margin-bottom: 8px; }
+  .score-label { font-size: 14px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* MATH ACCORDIONS */
+  .math-accordion { margin-bottom: 8px; border: 1px solid #3a3a3a; overflow: hidden; }
+  .math-accordion-header { display: flex; align-items: center; justify-content: space-between; background: #222; padding: 14px 18px; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 1px; color: var(--light); transition: background 0.2s; border-left: 4px solid var(--orange); user-select: none; }
+  .math-accordion-header:hover { background: #2a2a2a; }
+  .math-accordion-header .acc-right { display: flex; align-items: center; gap: 14px; }
+  .acc-meta { font-size: 12px; color: var(--muted); letter-spacing: 0; font-family: 'Source Sans 3', sans-serif; text-transform: none; }
+  .acc-score { font-size: 12px; color: var(--muted); font-family: 'Source Sans 3', sans-serif; text-transform: none; letter-spacing: 0; }
+  .acc-arrow { font-size: 16px; transition: transform 0.3s; color: var(--orange); }
+  .math-accordion-header.open .acc-arrow { transform: rotate(180deg); }
+  .math-accordion-body { display: none; background: #1e1e1e; }
+  .math-accordion-body.open { display: block; }
+
+  /* PROBLEM NAV DOTS */
+  .prob-navigator { display: flex; align-items: center; gap: 8px; padding: 14px 18px 0; flex-wrap: wrap; }
+  .prob-nav-label { font-family: 'Oswald', sans-serif; font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .prob-dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #444; background: #2c2c2c; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 12px; color: var(--muted); transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+  .prob-dot:hover { border-color: var(--orange); color: var(--orange); }
+  .prob-dot.active { border-color: var(--orange); background: var(--orange); color: white; }
+  .prob-dot.solved { border-color: var(--success); background: #1e3a2a; color: #abebc6; }
+  .prob-dot.active.solved { border-color: var(--orange); background: var(--orange); color: white; }
+
+  /* PROBLEM CARD */
+  .prob-card { padding: 16px 18px 20px; }
+  .prob-question { font-size: 16px; color: var(--light); line-height: 1.5; margin-bottom: 14px; padding: 14px 16px; background: #252525; border-left: 3px solid var(--orange); }
+
+  /* TOOL TOGGLES */
+  .prob-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tool-toggle { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 7px 14px; border: 1px solid #444; background: #2a2a2a; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .tool-toggle:hover, .tool-toggle.active { border-color: var(--blue-light); color: var(--blue-light); background: #0d1f2d; }
+  .tool-panel { display: none; border: 1px solid #1a4a6b; background: #0b1824; padding: 14px 16px; margin-bottom: 12px; }
+  .tool-panel.open { display: block; }
+
+  /* REFERENCE INSIDE PANEL */
+  .ref-mini-title { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 1.5px; color: var(--blue-light); text-transform: uppercase; margin-bottom: 6px; margin-top: 14px; }
+  .ref-mini-title:first-child { margin-top: 0; }
+  .ref-mini-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 4px; }
+  .ref-mini-table th { background: #1a3a52; color: #aed6f1; padding: 5px 10px; text-align: left; font-weight: 600; font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.5px; }
+  .ref-mini-table td { padding: 5px 10px; border-bottom: 1px solid #1a2a3a; color: #d6eaf8; }
+  .ref-mini-table tr:last-child td { border-bottom: none; }
+  .formula-pill { display: inline-block; background: #1a3a52; color: #85c1e9; font-family: 'Oswald', sans-serif; font-size: 13px; padding: 4px 10px; margin: 3px 4px 3px 0; letter-spacing: 0.5px; }
+
+  /* CALCULATOR */
+  .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .calc-display { grid-column: 1/-1; background: #0a0a0a; border: 1px solid #2a2a2a; padding: 10px 14px; margin-bottom: 5px; font-family: 'Oswald', sans-serif; font-size: 22px; color: var(--light); text-align: right; min-height: 46px; word-break: break-all; letter-spacing: 1px; }
+  .calc-btn { background: #2c2c2c; border: 1px solid #3a3a3a; color: var(--light); padding: 10px 6px; font-size: 15px; cursor: pointer; font-family: 'Oswald', sans-serif; transition: background 0.1s; letter-spacing: 0.5px; }
+  .calc-btn:hover { background: #3a3a3a; }
+  .calc-btn.op { background: #1a3a52; color: #85c1e9; }
+  .calc-btn.op:hover { background: #1e4a6a; }
+  .calc-btn.eq { background: var(--orange); color: white; }
+  .calc-btn.eq:hover { background: #d35400; }
+  .calc-btn.clr { background: #3a1a1a; color: #f1948a; }
+  .calc-btn.clr:hover { background: #4a2a2a; }
+  .calc-btn.span2 { grid-column: span 2; }
+  .calc-history { margin-top: 8px; font-size: 12px; color: var(--muted); max-height: 56px; overflow-y: auto; line-height: 1.6; }
+
+  /* ANSWER INPUTS */
+  .math-input-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+  .math-field { display: flex; flex-direction: column; gap: 4px; }
+  .math-field label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-family: 'Oswald', sans-serif; }
+  .math-field input { background: #111; border: 1px solid #444; color: var(--light); font-size: 17px; padding: 8px 12px; width: 120px; font-family: 'Oswald', sans-serif; outline: none; }
+  .math-field input:focus { border-color: var(--orange); }
+  .math-field input.correct { border-color: var(--success); background: #0d1f12; color: #abebc6; }
+  .math-field input.incorrect { border-color: var(--fail); background: #1f0d0d; color: #f1948a; }
+  .math-result { margin-top: 10px; padding: 10px 14px; font-size: 14px; display: none; line-height: 1.6; }
+  .math-result.show { display: block; }
+  .math-result.correct { background: #1e3a2a; color: #abebc6; }
+  .math-result.incorrect { background: #3a1a1a; color: #f1948a; }
+  .math-result.hint { background: #0d1f2d; color: #85c1e9; }
+  .prob-btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+  /* DEDICATED REFERENCE PAGE */
+  .ref-page-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .ref-card { background: #1c1c1c; border: 1px solid #333; overflow: hidden; }
+  .ref-card-header { background: #111; border-bottom: 1px solid #333; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .ref-card-icon { font-size: 18px; }
+  .ref-card-title { font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); }
+  .ref-card-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'Source Sans 3', sans-serif; }
+  .ref-card-body { padding: 14px 16px; }
+  .ref-full-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .ref-full-table th { background: #222; color: #aed6f1; padding: 8px 12px; text-align: left; font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 1px; border-bottom: 2px solid var(--blue); }
+  .ref-full-table td { padding: 8px 12px; border-bottom: 1px solid #2a2a2a; color: var(--light); }
+  .ref-full-table tr:last-child td { border-bottom: none; }
+  .ref-full-table tr:hover td { background: #222; }
+  .ref-pill-group { display: flex; flex-direction: column; gap: 8px; }
+  .ref-pill { background: #111; border: 1px solid #333; border-left: 3px solid var(--blue-light); padding: 10px 14px; }
+  .ref-pill-formula { font-family: 'Oswald', sans-serif; font-size: 15px; color: #85c1e9; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .ref-pill-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .ref-pill-desc span { color: #aed6f1; }
+  .ref-section-label { font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #333; }
+  .ref-section-label:first-child { margin-top: 0; }
+  .ref-full-width { grid-column: 1 / -1; }
+  .ref-note { background: #1a2a1a; border: 1px solid #2d4a2d; border-left: 3px solid var(--success); padding: 10px 14px; font-size: 13px; color: #abebc6; line-height: 1.6; margin-top: 8px; }
+  .ref-warning { background: #2a1a0a; border: 1px solid #4a3010; border-left: 3px solid var(--orange); padding: 10px 14px; font-size: 13px; color: #f0b47a; line-height: 1.6; margin-top: 8px; }
+  .hydrant-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 16px; }
+    main { padding: 12px; }
+    .math-field input { width: 100px; font-size: 15px; }
+    .calc-btn { padding: 9px 4px; font-size: 14px; }
+    .acc-meta { display: none; }
+    .ref-page-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">FF Study</div>
+  <h1>AO PUMPER — OLC REVIEW</h1>
+  <div class="header-score" id="headerScore"></div>
+</header>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('flashcards',this)">📋 Flashcards</button>
+  <button class="nav-tab" onclick="showSection('quiz',this)">🎯 Quiz</button>
+  <button class="nav-tab" onclick="showSection('math',this)">🔢 Math Practice</button>
+  <button class="nav-tab" onclick="showSection('reference',this)">📖 Reference</button>
+</div>
+
+<main>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="section active">
+  <div class="section-title">FLASHCARDS</div>
+  <p class="section-sub">Click card to flip. Arrow keys or buttons to navigate. Spacebar to flip.</p>
+  <div class="quiz-controls">
+    <button class="btn btn-secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+    <button class="btn btn-secondary" onclick="resetCards()">↩ Reset</button>
+    <select id="categoryFilter" class="cat-select" onchange="filterCategory()">
+      <option value="all">All Topics</option>
+      <option value="positioning">Apparatus Positioning</option>
+      <option value="water">Water Properties & Pressure</option>
+      <option value="friction">Friction Loss</option>
+      <option value="supply">Water Supply</option>
+      <option value="pumps">Pumps & Operations</option>
+      <option value="hydraulics">Hydraulic Calculations</option>
+      <option value="evd">EVD — Apparatus & Driver</option>
+    </select>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="flashProgress"></div></div>
+  <div class="card-counter" id="cardCounter"></div>
+  <div class="flashcard-wrap" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="card-face card-front">
+        <div class="card-label">Question</div>
+        <div class="card-text" id="cardQuestion"></div>
+        <div class="card-hint">Click to reveal answer</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">Answer</div>
+        <div class="card-text" id="cardAnswer"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card-nav">
+    <button class="btn btn-secondary" onclick="prevCard()">← Previous</button>
+    <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+  <div class="section-title">MULTIPLE CHOICE QUIZ</div>
+  <p class="section-sub">Randomized multiple choice — pick your question count.</p>
+  <div id="quizStart">
+    <div class="quiz-controls">
+      <button class="btn btn-primary" onclick="startQuiz(10)">10 Questions</button>
+      <button class="btn btn-primary" onclick="startQuiz(20)">20 Questions</button>
+      <button class="btn btn-primary" onclick="startQuiz(allQuestions.length)">All Questions</button>
+    </div>
+  </div>
+  <div id="quizGame" style="display:none;">
+    <div class="progress-wrap"><div class="progress-bar" id="quizProgress"></div></div>
+    <div class="card-counter" id="quizCounter"></div>
+    <div class="mc-question" id="mcQuestion"></div>
+    <div class="mc-options" id="mcOptions"></div>
+    <div class="mc-feedback" id="mcFeedback"></div>
+    <button class="btn btn-primary" id="nextQBtn" onclick="nextQuestion()" style="display:none;">Next Question →</button>
+  </div>
+  <div id="quizResults" style="display:none;">
+    <div class="score-card">
+      <div class="score-big" id="finalScore">0%</div>
+      <div class="score-label">Final Score</div>
+      <div style="margin-top:14px;color:var(--muted);" id="finalDetail"></div>
+    </div>
+    <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
+  </div>
+</div>
+
+<!-- MATH PRACTICE -->
+<div id="math" class="section">
+  <div class="section-title">MATH PRACTICE</div>
+  <p class="section-sub">Click a category to expand. Each problem has a built-in 📖 Reference and 🧮 Calculator.</p>
+  <div id="mathAccordions"></div>
+</div>
+
+<!-- REFERENCE PAGE -->
+<div id="reference" class="section">
+  <div class="section-title">QUICK REFERENCE</div>
+  <p class="section-sub">All formulas, coefficients, and key values for fireground hydraulics in one place.</p>
+
+  <!-- FORMULAS ROW -->
+  <div class="ref-section-label">Core Formulas</div>
+  <div class="ref-page-grid">
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">💧</span>
+        <div>
+          <div class="ref-card-title">Solid Stream Flow</div>
+          <div class="ref-card-subtitle">GPM from a solid bore nozzle</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">GPM = 29.7 × D² × √NP</div>
+            <div class="ref-pill-desc">
+              <span>D</span> = nozzle diameter (inches) &nbsp;|&nbsp; <span>NP</span> = nozzle pressure (psi)<br>
+              <span>Handline NP</span> = 50 psi &nbsp;|&nbsp; <span>Master Stream NP</span> = 80 psi
+            </div>
+          </div>
+        </div>
+        <div class="ref-note" style="margin-top:10px;">√50 ≈ 7.07 &nbsp;|&nbsp; √80 ≈ 8.94 &nbsp;|&nbsp; √100 = 10 &nbsp;|&nbsp; √36 = 6 &nbsp;|&nbsp; √25 = 5</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">↩️</span>
+        <div>
+          <div class="ref-card-title">Nozzle Reaction</div>
+          <div class="ref-card-subtitle">Force pushing back on the firefighter</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">NR = 1.57 × d² × NP</div>
+            <div class="ref-pill-desc"><span>Solid stream nozzles</span> — d = nozzle diameter, NP = nozzle pressure</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">NR = 0.0505 × Q × √NP</div>
+            <div class="ref-pill-desc"><span>Fog nozzles</span> — Q = GPM flowing, NP = nozzle pressure (100 psi for fog)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🔥</span>
+        <div>
+          <div class="ref-card-title">Friction Loss</div>
+          <div class="ref-card-subtitle">Theoretical formula</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">FL = C × Q² × L</div>
+            <div class="ref-pill-desc">
+              <span>C</span> = hose coefficient (see table) &nbsp;|&nbsp; <span>Q</span> = GPM ÷ 100 &nbsp;|&nbsp; <span>L</span> = hose length ÷ 100
+            </div>
+          </div>
+        </div>
+        <div class="ref-warning">Example: 200' of 3" hose @ 300 GPM → C=0.8, Q=3, L=2 → 0.8×9×2 = <strong>14 psi</strong></div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚒</span>
+        <div>
+          <div class="ref-card-title">Pump Discharge Pressure</div>
+          <div class="ref-card-subtitle">Total pressure the pump must produce</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">PDP = NP + FL + AL + EP</div>
+            <div class="ref-pill-desc">
+              <span>NP</span> = nozzle pressure &nbsp;|&nbsp; <span>FL</span> = friction loss &nbsp;|&nbsp; <span>AL</span> = appliance loss &nbsp;|&nbsp; <span>EP</span> = elevation pressure
+            </div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">EP = 0.5 × H (feet)</div>
+            <div class="ref-pill-desc"><span>H</span> = height in feet above pump &nbsp;|&nbsp; In buildings: <span>5 psi × (floors − 1)</span></div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Net PDP = PDP − Intake Pressure</div>
+            <div class="ref-pill-desc">Used when being supplied by another pumper</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🏊</span>
+        <div>
+          <div class="ref-card-title">Pool Capacity</div>
+          <div class="ref-card-subtitle">Gallons in a swimming pool</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">C = 7.5 × L × W × D</div>
+            <div class="ref-pill-desc"><span>Rectangular</span> — L=length, W=width, D=avg depth (all in feet)</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">C = 7.5 × π × r² × D</div>
+            <div class="ref-pill-desc"><span>Round</span> — π=3.14, r=radius (diameter÷2), D=avg depth</div>
+          </div>
+        </div>
+        <div class="ref-note">7.5 = gallons per cubic foot of water</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">💦</span>
+        <div>
+          <div class="ref-card-title">Condensed Q Formula</div>
+          <div class="ref-card-subtitle">Quick FL for large hose</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Hose Size</th><th>Formula (per 100 ft)</th></tr>
+          <tr><td>2½"</td><td>Q² × 2</td></tr>
+          <tr><td>3"</td><td>Q²</td></tr>
+          <tr><td>4"</td><td>Q² ÷ 5</td></tr>
+          <tr><td>5"</td><td>Q² ÷ 15</td></tr>
+        </table>
+        <div class="ref-note" style="margin-top:8px;">Q = GPM ÷ 100 &nbsp;|&nbsp; Multiply result by number of 100' lengths</div>
+      </div>
+    </div>
+
+  </div><!-- end formulas grid -->
+
+  <!-- TABLES ROW -->
+  <div class="ref-section-label">Pressure & Coefficient Tables</div>
+  <div class="ref-page-grid">
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🎯</span>
+        <div>
+          <div class="ref-card-title">Nozzle Pressures</div>
+          <div class="ref-card-subtitle">Safe & efficient operating pressures</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Nozzle Type</th><th>NP (psi)</th></tr>
+          <tr><td>Solid Stream Handline (&lt;350 GPM)</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;font-size:16px;">50</td></tr>
+          <tr><td>Solid Stream Master Stream (≥350 GPM)</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;font-size:16px;">80</td></tr>
+          <tr><td>Fog Nozzle (standard)</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;font-size:16px;">100</td></tr>
+          <tr><td>Low Pressure Fog Nozzle</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;font-size:16px;">50 or 75</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">📐</span>
+        <div>
+          <div class="ref-card-title">FL Coefficients (C)</div>
+          <div class="ref-card-subtitle">Single hoseline — use in FL = CQ²L</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Hose Diameter</th><th>Coefficient (C)</th></tr>
+          <tr><td>1½"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">24</td></tr>
+          <tr><td>1¾"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">15.5</td></tr>
+          <tr><td>2½"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">2</td></tr>
+          <tr><td>3"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">0.8</td></tr>
+          <tr><td>4"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">0.2</td></tr>
+          <tr><td>5"</td><td style="color:#85c1e9;font-family:'Oswald',sans-serif;">0.08</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">⚙️</span>
+        <div>
+          <div class="ref-card-title">Appliance Friction Loss</div>
+          <div class="ref-card-subtitle">Add to total pressure loss</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Condition</th><th>Loss (psi)</th></tr>
+          <tr><td>Flow &lt; 350 GPM</td><td style="color:var(--success);font-family:'Oswald',sans-serif;font-size:16px;">0</td></tr>
+          <tr><td>Flow ≥ 350 GPM (non-master)</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;font-size:16px;">10</td></tr>
+          <tr><td>All Master Streams</td><td style="color:#f1948a;font-family:'Oswald',sans-serif;font-size:16px;">25</td></tr>
+        </table>
+        <div class="ref-note" style="margin-top:8px;">Apply per appliance in the hose layout (wye, siamese, etc.)</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚿</span>
+        <div>
+          <div class="ref-card-title">Hydrant Color Codes</div>
+          <div class="ref-card-subtitle">Flow capacity rating</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Color</th><th>Flow Capacity</th></tr>
+          <tr><td><span class="hydrant-dot" style="background:#add8e6;"></span>Light Blue</td><td>1,500 GPM or more</td></tr>
+          <tr><td><span class="hydrant-dot" style="background:#27ae60;"></span>Green</td><td>1,000 – 1,499 GPM</td></tr>
+          <tr><td><span class="hydrant-dot" style="background:#e67e22;"></span>Orange</td><td>500 – 999 GPM</td></tr>
+          <tr><td><span class="hydrant-dot" style="background:#c0392b;"></span>Red</td><td>Less than 500 GPM</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- end tables grid -->
+
+  <!-- RULE OF EIGHTS FULL WIDTH -->
+  <div class="ref-section-label">Rule of Eights — Smooth Bore Master Stream Flows</div>
+  <div class="ref-page-grid">
+    <div class="ref-card ref-full-width">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">8️⃣</span>
+        <div>
+          <div class="ref-card-title">ROT — Smooth Bore Master Streams</div>
+          <div class="ref-card-subtitle">Rule of Thumb GPM vs. theoretical flow at 80 psi NP</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Nozzle Diameter</th><th>ROT GPM</th><th>Theoretical Flow GPM</th><th>Difference</th></tr>
+          <tr><td>1 3/8"</td><td>500</td><td>502</td><td style="color:var(--success);">+2</td></tr>
+          <tr><td>1½" (1 4/8")</td><td>600</td><td>597</td><td style="color:#f1948a;">−3</td></tr>
+          <tr><td>1 5/8"</td><td>700</td><td>701</td><td style="color:var(--success);">+1</td></tr>
+          <tr><td>1¾" (1 6/8")</td><td>800</td><td>813</td><td style="color:var(--success);">+13</td></tr>
+          <tr><td>1 7/8"</td><td>900</td><td>933</td><td style="color:var(--success);">+33</td></tr>
+          <tr><td>2"</td><td>1,000</td><td>1,062</td><td style="color:var(--success);">+62</td></tr>
+        </table>
+        <div class="ref-note" style="margin-top:10px;">The Rule of Eights: each 1/8" increase in nozzle diameter adds approximately 100 GPM to flow.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY OPERATIONAL RULES -->
+  <div class="ref-section-label">Key Operational Rules & Values</div>
+  <div class="ref-page-grid">
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">📏</span>
+        <div>
+          <div class="ref-card-title">Drafting Limits</div>
+          <div class="ref-card-subtitle">Maximum lift values</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Effective Fire Stream: ≤ 20 ft</div>
+            <div class="ref-pill-desc">Recommended maximum lift for producing effective streams</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Absolute Max Lift: ~25 ft</div>
+            <div class="ref-pill-desc">Theoretical maximum in most conditions</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Dependable Lift: ≥ 14.7 ft</div>
+            <div class="ref-pill-desc">Minimum every properly functioning pump should achieve</div>
+          </div>
+        </div>
+        <div class="ref-note" style="margin-top:10px;">Lift = difference in elevation between water surface and center of pump intake</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">💧</span>
+        <div>
+          <div class="ref-card-title">Water Properties</div>
+          <div class="ref-card-subtitle">Key values to remember</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Property</th><th>Value</th></tr>
+          <tr><td>Weight of fresh water</td><td>8.3 lb/gal &nbsp;|&nbsp; 1 kg/L</td></tr>
+          <tr><td>Steam expansion at 212°F</td><td>1,700× original volume</td></tr>
+          <tr><td>Freezing point</td><td>32°F (0°C)</td></tr>
+          <tr><td>Head pressure conversion</td><td>÷ 2.304 ft = 1 psi</td></tr>
+          <tr><td>Pressure per foot of elevation</td><td>0.434 psi/ft</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🔄</span>
+        <div>
+          <div class="ref-card-title">Relay & Supply Operations</div>
+          <div class="ref-card-subtitle">Key rules for relay pumping</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Min. residual intake: 20 psi</div>
+            <div class="ref-pill-desc">Maintain at master intake gauge during pumping to prevent cavitation</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">FDC supply: 150 psi</div>
+            <div class="ref-pill-desc">Default discharge pressure into fire department connection when no specific info available</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Relay capacity = smallest pump/hose</div>
+            <div class="ref-pill-desc">Overall relay capacity is limited by its weakest component</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚨</span>
+        <div>
+          <div class="ref-card-title">Strainer Minimum Depths</div>
+          <div class="ref-card-subtitle">For drafting operations</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Strainer Type</th><th>Min. Depth</th></tr>
+          <tr><td>Barrel-type strainer</td><td>2 ft (600 mm)</td></tr>
+          <tr><td>Floating strainer</td><td>1 ft (300 mm)</td></tr>
+          <tr><td>Traditional strainer (rated capacity)</td><td>24 in (600 mm) over strainer</td></tr>
+        </table>
+        <div class="ref-warning" style="margin-top:8px;">All personnel near water must wear PFDs and use safety lines regardless of assumed depth.</div>
+      </div>
+    </div>
+
+  </div><!-- end operational grid -->
+
+  <!-- CENTRIFUGAL PUMP FACTS -->
+  <div class="ref-section-label">Centrifugal Pump Quick Facts</div>
+  <div class="ref-page-grid">
+    <div class="ref-card ref-full-width">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">⚙️</span>
+        <div>
+          <div class="ref-card-title">Centrifugal Pump Performance Rules</div>
+          <div class="ref-card-subtitle">Key relationships to memorize</div>
+        </div>
+      </div>
+      <div class="ref-card-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+        <div class="ref-pill"><div class="ref-pill-formula">Double speed → 4× pressure</div><div class="ref-pill-desc">Impeller speed doubled = pressure quadrupled</div></div>
+        <div class="ref-pill"><div class="ref-pill-formula">Rated at 150 psi at draft</div><div class="ref-pill-desc">Maximum volume capacity rating per NFPA 1901</div></div>
+        <div class="ref-pill"><div class="ref-pill-formula">NOT self-priming</div><div class="ref-pill-desc">Cannot pump air — requires priming pump for drafting</div></div>
+        <div class="ref-pill"><div class="ref-pill-formula">Parallel = volume</div><div class="ref-pill-desc">Transfer valve in parallel position splits flow between impellers</div></div>
+        <div class="ref-pill"><div class="ref-pill-formula">Series = pressure</div><div class="ref-pill-desc">Transfer valve in series doubles discharge pressure</div></div>
+        <div class="ref-pill"><div class="ref-pill-formula">Thermal relief valve</div><div class="ref-pill-desc">Prevents overheating by circulating water when no discharge is open</div></div>
+      </div>
+    </div>
+  <!-- EVD SECTION -->
+  <div class="ref-section-label">EVD — Apparatus Types, Inspection & Driver Operations</div>
+  <div class="ref-page-grid">
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚒</span>
+        <div>
+          <div class="ref-card-title">NFPA® 1901 Minimums</div>
+          <div class="ref-card-subtitle">Fire department pumper requirements</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Requirement</th><th>Minimum</th></tr>
+          <tr><td>Pump capacity</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">750 GPM (3,000 L/min)</td></tr>
+          <tr><td>Water tank capacity</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">300 gal (1,200 L)</td></tr>
+          <tr><td>Mobile water supply tank</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">1,000 gal (4,000 L)</td></tr>
+          <tr><td>Pump capacity &gt;500 GPM: min discharge</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">Two 2½" discharges</td></tr>
+          <tr><td>Hydrostatic test (piping/pump)</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">500 psi (3,500 kPa)</td></tr>
+          <tr><td>Tire replacement per NFPA® 1911</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">Every 10 years</td></tr>
+          <tr><td>Brake testing frequency</td><td style="color:var(--orange);font-family:'Oswald',sans-serif;">Annually (NFPA® 1911)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚛</span>
+        <div>
+          <div class="ref-card-title">Apparatus Types</div>
+          <div class="ref-card-subtitle">Know the purpose of each</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Type</th><th>Key Feature / Purpose</th></tr>
+          <tr><td>Pumper</td><td>Primary attack; min 750 GPM, 300-gal tank</td></tr>
+          <tr><td>Mini-pumper</td><td>Smaller chassis; initial attack</td></tr>
+          <tr><td>Mobile water supply (Tanker)</td><td>Transport water; min 1,000-gal tank</td></tr>
+          <tr><td>Wildland / Brush truck</td><td>Pump &amp; roll; also called brush breakers</td></tr>
+          <tr><td>ARFF (Aircraft Rescue)</td><td>Major, rapid intervention, combined agent</td></tr>
+          <tr><td>Quint</td><td>Pump + tank + hose + aerial + ground ladders</td></tr>
+          <tr><td>Fireboat</td><td>Ice rescue / marine operations</td></tr>
+          <tr><td>Trailer-mounted pump</td><td>Long-term ops (e.g., landfills)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🔍</span>
+        <div>
+          <div class="ref-card-title">Inspection Procedures</div>
+          <div class="ref-card-subtitle">Walk-around & pretrip rules</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Start: driver's door, clockwise</div>
+            <div class="ref-pill-desc">Begin walk-around at driver's door; proceed clockwise around apparatus</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Always chock wheels when parked</div>
+            <div class="ref-pill-desc">Required every time the driver/operator exits the cab</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Steering play: ≤ 10° either direction</div>
+            <div class="ref-pill-desc">Excessive play can indicate worn steering components</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Air brake min pressure: 80 psi</div>
+            <div class="ref-pill-desc">Air pressure protection valve prevents air horns below 80 psi (560 kPa)</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Never rely only on gauges</div>
+            <div class="ref-pill-desc">Always physically inspect all fluid levels — don't trust warning lights alone</div>
+          </div>
+        </div>
+        <div class="ref-note" style="margin-top:10px;">Talk to the last driver for the most accurate account of how the vehicle operated.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">⚡</span>
+        <div>
+          <div class="ref-card-title">Electrical Systems</div>
+          <div class="ref-card-subtitle">Inverters, generators & load management</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <table class="ref-full-table">
+          <tr><th>Equipment</th><th>Key Fact</th></tr>
+          <tr><td>Inverter</td><td>Converts DC → AC; small power needs at vehicle</td></tr>
+          <tr><td>Portable generator</td><td>Up to 5,000 watts; gasoline/diesel; remote use</td></tr>
+          <tr><td>Vehicle-mounted generator</td><td>Gasoline, diesel, or hydraulic; separate engine = noisy</td></tr>
+          <tr><td>Portable lights</td><td>300–1,000 watts; away from apparatus</td></tr>
+          <tr><td>Fixed lights</td><td>General scene lighting</td></tr>
+          <tr><td>Junction boxes</td><td>Multiple connections from one source</td></tr>
+          <tr><td>Adapters</td><td>Allow plug-in to standard electrical outlets</td></tr>
+          <tr><td>Load sequencer</td><td>Turns lights on at specified intervals</td></tr>
+          <tr><td>Load monitor</td><td>Shuts down less important equipment during overload</td></tr>
+        </table>
+        <div class="ref-warning" style="margin-top:8px;">Batteries give off hydrogen gas — highly explosive. Jump-start only with same-voltage system.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🚦</span>
+        <div>
+          <div class="ref-card-title">Driver/Operator Legal & Safety</div>
+          <div class="ref-card-subtitle">Regulations, liability & safe operations</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Most accidents: intersections</div>
+            <div class="ref-pill-desc">Highest risk point during emergency response</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Most costly accidents: backing</div>
+            <div class="ref-pill-desc">Backing accidents = significant % of all damage repair costs</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">License authority: Federal DOT</div>
+            <div class="ref-pill-desc">States/provinces may alter federal requirements as needed</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Lights/siren: may exempt speed limits</div>
+            <div class="ref-pill-desc">Do NOT exempt from: yielding to other emergency vehicles, safe driving</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Both driver AND department liable</div>
+            <div class="ref-pill-desc">Both can be held responsible in civil or criminal cases</div>
+          </div>
+        </div>
+        <div class="ref-note" style="margin-top:10px;">All riders must wear seat belts before apparatus is put in motion. Gear is donned before boarding in most departments.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-icon">🛞</span>
+        <div>
+          <div class="ref-card-title">Tires, Brakes & GVWR</div>
+          <div class="ref-card-subtitle">Key specs and replacement rules</div>
+        </div>
+      </div>
+      <div class="ref-card-body">
+        <div class="ref-pill-group">
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Tire replacement: every 10 years</div>
+            <div class="ref-pill-desc">Per NFPA® 1911 — regardless of tread condition</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">All tires: same size &amp; weight rating</div>
+            <div class="ref-pill-desc">Must match manufacturer specifications; based on gross axle weight ratings</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">Brake test: annually (NFPA® 1911)</div>
+            <div class="ref-pill-desc">Thorough testing required each year</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">GVWR = max safe operating weight</div>
+            <div class="ref-pill-desc">Maximum weight at which a vehicle can be safely operated on roadways in ideal conditions</div>
+          </div>
+          <div class="ref-pill">
+            <div class="ref-pill-formula">ABS = straight-line braking</div>
+            <div class="ref-pill-desc">Antilock brakes keep apparatus tracking straight during emergency/heavy braking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end EVD grid -->
+
+</div><!-- end reference section -->
+
+</main>
+
+<script>
+// =====================================================================
+// Q&A DATA
+// =====================================================================
+const allQuestions = [
+  {q:"What determines the most advantageous position for an attack pumper?",a:"Size-up",cat:"positioning"},
+  {q:"What should the driver/operator do when fire conditions are evident upon arrival?",a:"Place the apparatus in a safe position that includes an exit route.",cat:"positioning"},
+  {q:"What should the driver/operator do when the first apparatus arrives with no fire evident?",a:"Pull apparatus past the front of the building.",cat:"positioning"},
+  {q:"What is a guideline for positioning apparatus at a fire scene?",a:"Attempt to position apparatus upwind of the incident.",cat:"positioning"},
+  {q:"How can personnel be protected from traffic at an incident?",a:"Block lanes of the road where firefighters are operating.",cat:"positioning"},
+  {q:"What is generally considered the safest apparatus position in case of structural collapse?",a:"Corners of the structure.",cat:"positioning"},
+  {q:"When is the attack pumper positioned on the side of the street closest to the building?",a:"If the building is less than five floors tall.",cat:"positioning"},
+  {q:"What is the most accurate statement about positioning for wildland fire attack?",a:"Apparatus are seldom positioned in the same location for the duration of an incident.",cat:"positioning"},
+  {q:"How should the vehicle be positioned during a wildland fire attack?",a:"Facing the direction of an exit path with the front wheels straight.",cat:"positioning"},
+  {q:"What is the most likely staging protocol for the initial response of more than one unit?",a:"Level I staging.",cat:"positioning"},
+  {q:"What is the most likely staging protocol when a large number of units are responding?",a:"Level II staging.",cat:"positioning"},
+  {q:"What incident scene control zone is closest to the release of the material?",a:"Hot zone.",cat:"positioning"},
+  {q:"What zone is also known as the yellow zone?",a:"Warm zone.",cat:"positioning"},
+  {q:"In which scene control zone does decontamination usually occur?",a:"Warm zone.",cat:"positioning"},
+  {q:"What zone is considered safe and does not require PPE?",a:"Cold zone.",cat:"positioning"},
+  {q:"In which zone are driver/operators most likely to stage their apparatus?",a:"Cold zone.",cat:"positioning"},
+  {q:"What is the most accurate statement about the properties of water?",a:"Water is considered to be virtually incompressible.",cat:"water"},
+  {q:"What does ordinary fresh water weigh?",a:"8.3 lb/gal (1 kg/L)",cat:"water"},
+  {q:"At 212°F, how much volume does steam occupy compared to water?",a:"1,700 times its original volume",cat:"water"},
+  {q:"What is a characteristic of water compared to other extinguishing agents?",a:"It has greater heat-absorbing capacity",cat:"water"},
+  {q:"What characteristic of water affects its ability to soak into materials?",a:"It has a high surface tension",cat:"water"},
+  {q:"What is the most accurate statement about water and electricity?",a:"Water is a good conductor of electricity",cat:"water"},
+  {q:"When can water be used to smother fires in combustible liquids?",a:"When the liquid's specific gravity is higher than 1",cat:"water"},
+  {q:"What is the best description of pressure?",a:"Force per unit area",cat:"water"},
+  {q:"What does the third principle of pressure state?",a:"Pressure applied to a confined fluid is transmitted equally in all directions",cat:"water"},
+  {q:"What refers to stored potential energy available to force water through pipes?",a:"Static pressure",cat:"water"},
+  {q:"What refers to the forward velocity pressure while water is flowing from a discharge opening?",a:"Flow pressure",cat:"water"},
+  {q:"What refers to the portion of total available pressure not used to overcome friction loss?",a:"Residual pressure",cat:"water"},
+  {q:"What happens when a nozzle is above the level of the pump?",a:"There is pressure loss",cat:"water"},
+  {q:"What happens when a nozzle is below the level of the pump?",a:"There is pressure gain",cat:"water"},
+  {q:"What is friction loss?",a:"The part of total pressure lost while forcing water through pipes and fittings",cat:"friction"},
+  {q:"What is a likely cause of friction loss in fire hose?",a:"Sharp bends",cat:"friction"},
+  {q:"What does the first principle of friction loss state?",a:"Friction loss varies directly with length of hose or pipe",cat:"friction"},
+  {q:"What does the second principle of friction loss illustrate?",a:"Friction loss develops much faster than change in velocity",cat:"friction"},
+  {q:"What advantage does larger size hose provide regarding friction loss?",a:"Friction loss varies inversely as the fifth power of diameter of hose",cat:"friction"},
+  {q:"What causes water hammer?",a:"Suddenly stopping water moving through a hose or pipe",cat:"friction"},
+  {q:"What is the formula for friction loss?",a:"FL = CQ²L",cat:"friction"},
+  {q:"What is the correct formula for determining pump discharge pressure?",a:"PDP = NP + TPL (Nozzle pressure plus total pressure loss)",cat:"friction"},
+  {q:"For which nozzle is 50 psi a safe and efficient nozzle pressure?",a:"Solid stream nozzle (handline)",cat:"friction"},
+  {q:"For which nozzle is 80 psi a safe and efficient nozzle pressure?",a:"Solid stream nozzle (master stream)",cat:"friction"},
+  {q:"For which nozzle is 100 psi a safe and efficient nozzle pressure?",a:"Fog nozzle",cat:"friction"},
+  {q:"What is the friction loss for master stream appliances?",a:"25 psi for all appliances",cat:"friction"},
+  {q:"What is the customary formula for elevation pressure loss?",a:"EP = 0.5 × Height in feet",cat:"friction"},
+  {q:"What formula determines elevation pressure in a multistory building?",a:"5 psi × (number of stories − 1)",cat:"friction"},
+  {q:"What is a dead-end fire hydrant?",a:"A fire hydrant that receives water from only one direction",cat:"supply"},
+  {q:"In a grid system, what are large pipes that convey large quantities of water called?",a:"Primary feeders.",cat:"supply"},
+  {q:"What are intermediate-sized pipes in a grid system called?",a:"Secondary feeders.",cat:"supply"},
+  {q:"What type of valve is most commonly used on sprinkler systems?",a:"Outside screw and yoke (OS&Y) valve.",cat:"supply"},
+  {q:"What is the most common type of valve used on public water distribution systems?",a:"Nonindicating valves.",cat:"supply"},
+  {q:"What consists of making a lay from the hydrant to the fire location?",a:"Forward lay.",cat:"supply"},
+  {q:"What consists of laying hose from the fire to the water source?",a:"Reverse lay.",cat:"supply"},
+  {q:"What does the intake gauge display when connected to a hydrant and not discharging?",a:"Static pressure.",cat:"supply"},
+  {q:"What does the intake gauge display when a pumper is discharging water?",a:"Residual pressure.",cat:"supply"},
+  {q:"What is the recommended lift for an effective fire stream during drafting?",a:"No greater than 20 feet (6 m).",cat:"supply"},
+  {q:"What is the approximate maximum lift in most circumstances?",a:"25 feet (7.5 m).",cat:"supply"},
+  {q:"What is lift in the context of drafting?",a:"The difference in elevation between the surface of the static water supply and the center of the pump intake.",cat:"supply"},
+  {q:"What should every fire pump have as a dependable lift?",a:"At least 14.7 feet (4.5 m).",cat:"supply"},
+  {q:"What is an underground water storage receptacle in an area without a hydrant system?",a:"Cistern.",cat:"supply"},
+  {q:"What is the most accurate statement about a centrifugal pump?",a:"A centrifugal pump is unable to pump air and is not self-priming.",cat:"pumps"},
+  {q:"What principle does the operation of a centrifugal pump rely on?",a:"A rapidly revolving disk tends to throw water introduced at its center toward the outer edges.",cat:"pumps"},
+  {q:"What dictates the amount of pressure developed in a centrifugal pump?",a:"The speed of the impeller.",cat:"pumps"},
+  {q:"What happens when the speed of the impeller is doubled in a centrifugal pump?",a:"It results in four times as much pressure.",cat:"pumps"},
+  {q:"What occurs when pumping in the parallel (volume) position?",a:"Each of the impellers takes water from a source and delivers it to the discharge.",cat:"pumps"},
+  {q:"What is the result of setting the transfer valve to series (pressure) in a multistage pump?",a:"A much higher pressure than would be achieved in parallel operation.",cat:"pumps"},
+  {q:"What is the most accurate statement about mechanical seals?",a:"It is important to operate the pump regularly to lubricate the seals.",cat:"pumps"},
+  {q:"Which type of pump is MOST vulnerable to damage from exposure or a vehicle collision?",a:"Front-mount pump",cat:"pumps"},
+  {q:"Which pump design offers more even weight distribution on the chassis?",a:"Rear-mount pump",cat:"pumps"},
+  {q:"What is the most accurate statement about positive displacement pumps?",a:"They serve a vital role because of their ability to pump air and foam.",cat:"pumps"},
+  {q:"What is the most common cause of an inability to prime?",a:"An air leak that prevents primer from developing enough vacuum to draft water.",cat:"pumps"},
+  {q:"What can occur when pumping at a low residual pressure while being supplied by other apparatus?",a:"Cavitation of the pump.",cat:"pumps"},
+  {q:"What is an indication that a pump is cavitating?",a:"Lack of reaction on the pressure gauge to increases in the throttle.",cat:"pumps"},
+  {q:"According to NFPA 1901, all components of the piping system must be made of?",a:"Corrosion resistant material",cat:"pumps"},
+  {q:"What is the primary consideration for friction loss?",a:"Volume of water flowing per minute",cat:"hydraulics"},
+  {q:"What does total pressure loss include?",a:"Friction loss and elevation pressure loss combined with the loss associated with appliances",cat:"hydraulics"},
+  {q:"What is the correct formula for Net Pump Discharge Pressure?",a:"Pump Discharge Pressure − Intake Reading",cat:"hydraulics"},
+  {q:"What is a friction loss guideline when flowing 350 gpm or greater through an appliance?",a:"There is a loss of 10 psi for each appliance, other than master stream devices",cat:"hydraulics"},
+  {q:"When using multiple hoselines of equal length and diameter, what is required for loss calculations?",a:"Calculations need only be made for one line",cat:"hydraulics"},
+  {q:"What is the friction loss when two equal hoselines are Siamesed to supply a fire stream?",a:"Approximately 25 percent less than that of a single hoseline at the same nozzle pressure",cat:"hydraulics"},
+  {q:"What should the pump discharge pressure be based on?",a:"Hoseline with the greatest pressure requirement",cat:"hydraulics"},
+  {q:"If a sprinkler FDC has no specific info, what is the guideline for discharge pressure?",a:"150 psi into the FDC.",cat:"hydraulics"},
+  {q:"What determines the overall capacity of the relay system?",a:"The smallest pump and the smallest diameter of hose used in the relay.",cat:"hydraulics"},
+  {q:"Centrifugal pumps are rated to pump at maximum volume at what pressure?",a:"150 psi at draft",cat:"hydraulics"},
+  // EVD
+  {q:"What is the main purpose of fire department pumpers?",a:"To provide adequate water pressure for effective fire streams.",cat:"evd"},
+  {q:"What is the minimum pump capacity for fire department pumpers according to NFPA® 1901?",a:"750 gpm (3,000 L/min).",cat:"evd"},
+  {q:"What is the minimum water tank capacity for fire department pumpers according to NFPA® 1901?",a:"300 gallons (1,200 liters).",cat:"evd"},
+  {q:"What NFPA® standard specifies minimum portable equipment that must be carried on all pumpers?",a:"NFPA® 1901.",cat:"evd"},
+  {q:"What term is often used to define pumping apparatus smaller than a full-size pumper?",a:"Mini-pumper.",cat:"evd"},
+  {q:"What is the function of mobile water supply apparatus?",a:"To transport water to areas where a water system is nonexistent or inadequate.",cat:"evd"},
+  {q:"What is the minimum tank capacity for mobile water supply apparatus according to NFPA® 1901?",a:"1,000 gallons (4,000 L).",cat:"evd"},
+  {q:"When is a water tender used in a mobile shuttle operation?",a:"When it uses a quick dump valve to off-load its water supply into folding portable water tanks.",cat:"evd"},
+  {q:"What are wildland fire apparatus also known as?",a:"Brush trucks, brush breakers, or booster apparatus.",cat:"evd"},
+  {q:"Which apparatus is most likely to have a pump and roll system?",a:"Wildland fire apparatus.",cat:"evd"},
+  {q:"What are the three general categories of aircraft rescue and fire apparatus?",a:"Major fire fighting vehicles, rapid intervention vehicles, and combined agent vehicles.",cat:"evd"},
+  {q:"What is an apparatus equipped with a fire pump, water tank, hose, aerial device, and ground ladders called?",a:"Quint.",cat:"evd"},
+  {q:"What converts a vehicle's DC current into AC current?",a:"Inverter.",cat:"evd"},
+  {q:"What equipment is powered by small engines and has power capacities up to 5,000 watts?",a:"Portable generator.",cat:"evd"},
+  {q:"What equipment supplies power to several connections from one source?",a:"Junction boxes.",cat:"evd"},
+  {q:"Why should a driver/operator use an inspection checklist?",a:"To ensure a uniform and complete inspection.",cat:"evd"},
+  {q:"What should a driver/operator do if equipment is found broken or defective?",a:"Follow the established policy of the AHJ for documenting, reporting, and following up on repair status.",cat:"evd"},
+  {q:"What can cause a corrosive effect on steel body components?",a:"Road salt used during inclement weather.",cat:"evd"},
+  {q:"Where does the driver/operator begin a walk-around inspection?",a:"At the driver's door on the cab and works around the apparatus in a clockwise pattern.",cat:"evd"},
+  {q:"What should be done whenever an apparatus is parked?",a:"Chock its wheels.",cat:"evd"},
+  {q:"According to NFPA® 1911, when must tires be replaced?",a:"Every ten years.",cat:"evd"},
+  {q:"What component in a load management system turns on various lights at specified intervals?",a:"Load sequencer.",cat:"evd"},
+  {q:"Which component in a load management system shuts down less important electrical equipment during overload?",a:"Load monitor.",cat:"evd"},
+  {q:"How much steering wheel play should there generally be?",a:"No more than approximately 10 degrees in either direction.",cat:"evd"},
+  {q:"What is the Gross Vehicle Weight Rating (GVWR)?",a:"Maximum weight at which a vehicle can be safely operated on roadways in ideal conditions.",cat:"evd"},
+  {q:"What pressure must the air pressure protection valve prevent air horns from operating below?",a:"80 psi (560 kPa).",cat:"evd"},
+  {q:"What is a function of antilock braking systems (ABS)?",a:"Assists the driver/operator in keeping apparatus in a straight trajectory during heavy or emergency braking.",cat:"evd"},
+  {q:"How often should apparatus brakes be thoroughly tested?",a:"Annually.",cat:"evd"},
+  {q:"Which NFPA standard specifies methods for brake tests?",a:"NFPA 1911.",cat:"evd"},
+  {q:"What is the most accurate statement about checking fluid levels?",a:"Never rely solely on warning lights or gauges; all fluid levels should be inspected.",cat:"evd"},
+  {q:"What does the Selective Catalyst Reductant (SCR) system use to help reduce emissions?",a:"Diesel Exhaust Fluid (DEF).",cat:"evd"},
+  {q:"What type of gas can batteries give off that is highly explosive?",a:"Hydrogen gas.",cat:"evd"},
+  {q:"What must the vehicle being used as a power source have when jump-starting another vehicle?",a:"The same voltage electrical system.",cat:"evd"},
+  {q:"When is a posttrip inspection conducted?",a:"After the apparatus has been operated for an extended period of time.",cat:"evd"},
+  {q:"What must all fire departments establish regarding driver/operator training?",a:"A thorough training program.",cat:"evd"},
+  {q:"Which agency establishes basic requirements for licensing a driver in the U.S.?",a:"Federal Department of Transportation (DOT).",cat:"evd"},
+  {q:"What is most likely to be exempt when emergency vehicles have their audible and visual warning lights on?",a:"Speed limits.",cat:"evd"},
+  {q:"Where do most accidents occur?",a:"Intersections.",cat:"evd"},
+  {q:"What accounts for a significant percentage of all damage repair costs for a fire department?",a:"Backing accidents.",cat:"evd"},
+  {q:"What action would most likely be considered reckless when driving an apparatus?",a:"Failing to yield to other responding emergency vehicles.",cat:"evd"},
+  {q:"What is the most accurate statement about excessive speed and braking?",a:"Excessive speed can cause difficulties when braking.",cat:"evd"},
+  {q:"What must driver/operators complete before being allowed to drive under emergency conditions?",a:"A thorough training program.",cat:"evd"},
+  {q:"What is the primary reason for daily pretrip inspections?",a:"Minimize mechanical failure.",cat:"evd"},
+  {q:"Who should advise a driver/operator who may be mentally or physically impaired?",a:"Any firefighter.",cat:"evd"},
+  {q:"When do firefighters don protective gear in most fire departments?",a:"Before getting into apparatus.",cat:"evd"},
+  {q:"What must all riders do before the apparatus is put into motion?",a:"Wear seat belts.",cat:"evd"},
+  {q:"What is accurate about the driver/operator and maintenance responsibilities?",a:"The driver/operator is often able to correct minor deficiencies.",cat:"evd"},
+  {q:"What is a function of apparatus maintenance and inspection records?",a:"A warranty claim may be needed to document required maintenance was performed.",cat:"evd"},
+];
+
+// =====================================================================
+// REFERENCE DATA
+// =====================================================================
+const refData = {
+  nozzlePressures: {
+    title: 'Nozzle Pressures',
+    headers: ['Nozzle Type','Pressure'],
+    rows: [
+      ["Solid Stream Handline (&lt;350 GPM)","50 psi"],
+      ["Solid Stream Master Stream (≥350 GPM)","80 psi"],
+      ["Fog Nozzle","100 psi"],
+      ["Low Pressure Fog","50 or 75 psi"],
+    ]
+  },
+  coefficients: {
+    title: 'FL Coefficients (C)',
+    headers: ['Hose Dia.','C'],
+    rows: [["1½\"","24"],["1¾\"","15.5"],["2½\"","2"],["3\"","0.8"],["4\"","0.2"],["5\"","0.08"]]
+  },
+  appliances: {
+    title: 'Appliance Friction Loss',
+    headers: ['Condition','Loss'],
+    rows: [["Flow &lt; 350 GPM","0 psi"],["Flow ≥ 350 GPM","10 psi"],["All Master Streams","25 psi"]]
+  },
+  hydrantColors: {
+    title: 'Hydrant Color Codes',
+    headers: ['Color','Flow'],
+    rows: [["Light Blue","1,500+ GPM"],["Green","1,000–1,499 GPM"],["Orange","500–999 GPM"],["Red","&lt; 500 GPM"]]
+  },
+  condensedQ: {
+    title: 'Condensed Q Formula',
+    headers: ['Hose','Formula'],
+    rows: [["2½\"","Q² × 2"],["3\"","Q²"],["4\"","Q² ÷ 5"],["5\"","Q² ÷ 15"]]
+  },
+};
+
+function makeRefHTML(cats, extraRef) {
+  let html = '';
+  cats.forEach(cat => {
+    const d = refData[cat];
+    if (!d) return;
+    html += `<div class="ref-mini-title">${d.title}</div>`;
+    html += `<table class="ref-mini-table"><tr>${d.headers.map(h=>`<th>${h}</th>`).join('')}</tr>`;
+    d.rows.forEach(row => { html += `<tr>${row.map(c=>`<td>${c}</td>`).join('')}</tr>`; });
+    html += '</table>';
+  });
+  if (extraRef) html += extraRef;
+  return html;
+}
+
+// =====================================================================
+// MATH CATEGORIES & PROBLEMS
+// =====================================================================
+const mathCategories = [
+  {
+    title: "Solid Stream Flow",
+    subtitle: "GPM = 29.7 × D² × √NP",
+    refCats: ['nozzlePressures'],
+    extraRef: `<div class="ref-mini-title">Formula</div><div class="formula-pill">GPM = 29.7 × D² × √NP</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">D = nozzle diameter (inches) &nbsp;|&nbsp; NP = nozzle pressure (psi)</small>`,
+    problems: [
+      {id:"gpm1",q:"How many GPM will a 1\" solid stream handline flow?",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:210},sol:"29.7 × 1² × √50 = 29.7 × 1 × 7.07 ≈ 210 GPM",hint:"Handline NP = 50 psi → 29.7 × 1² × √50"},
+      {id:"gpm2",q:"How many GPM will a 1.5\" (1½\") solid stream master stream flow?",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:598},sol:"29.7 × 1.5² × √80 = 29.7 × 2.25 × 8.94 ≈ 598 GPM",hint:"Master stream NP = 80 psi → 29.7 × 2.25 × √80"},
+      {id:"gpm3",q:"How many GPM will a 1.25\" (1¼\") solid stream handline flow?",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:328},sol:"29.7 × 1.25² × √50 = 29.7 × 1.5625 × 7.07 ≈ 328 GPM",hint:"Handline NP = 50 psi → 29.7 × 1.5625 × √50"},
+      {id:"gpm4",q:"How many GPM will a 2\" solid stream master stream flow?",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:1062},sol:"29.7 × 2² × √80 = 29.7 × 4 × 8.94 ≈ 1,062 GPM",hint:"Master stream NP = 80 psi → 29.7 × 4 × √80"},
+      {id:"gpm5",q:"How many GPM will a 2.5\" hydrant opening flow with a pitot reading of 36 psi?",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:1114},sol:"29.7 × 2.5² × √36 = 29.7 × 6.25 × 6 ≈ 1,114 GPM",hint:"GPM = 29.7 × 6.25 × √36"},
+    ]
+  },
+  {
+    title: "Nozzle Reaction — Solid Stream",
+    subtitle: "NR = 1.57 × d² × NP",
+    refCats: ['nozzlePressures'],
+    extraRef: `<div class="ref-mini-title">Formulas</div><div class="formula-pill">NR = 1.57 × d² × NP</div><div class="formula-pill">GPM = 29.7 × D² × √NP</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">d = nozzle diameter &nbsp;|&nbsp; NP = nozzle pressure</small>`,
+    problems: [
+      {id:"nr1",q:"1.5\" handline with a 0.5\" smooth bore nozzle. Find Nozzle Pressure, GPM, and Nozzle Reaction.",fields:[{l:"NP (psi)",k:"np"},{l:"GPM",k:"gpm"},{l:"NR (lbs)",k:"nr"}],ans:{np:50,gpm:53,nr:20},sol:"NP=50 | GPM=29.7×0.25×7.07≈53 | NR=1.57×0.25×50≈20 lbs",hint:"Handline NP=50. Nozzle dia=0.5\". Calc GPM then NR."},
+      {id:"nr2",q:"3\" master stream with a 1.5\" smooth bore nozzle. Find Nozzle Pressure, GPM, and Nozzle Reaction.",fields:[{l:"NP (psi)",k:"np"},{l:"GPM",k:"gpm"},{l:"NR (lbs)",k:"nr"}],ans:{np:80,gpm:598,nr:283},sol:"NP=80 | GPM=29.7×2.25×8.94≈598 | NR=1.57×2.25×80≈283 lbs",hint:"Master stream NP=80. Nozzle dia=1.5\"."},
+      {id:"nr3",q:"1.75\" handline with a 0.75\" smooth bore nozzle. Find Nozzle Pressure, GPM, and Nozzle Reaction.",fields:[{l:"NP (psi)",k:"np"},{l:"GPM",k:"gpm"},{l:"NR (lbs)",k:"nr"}],ans:{np:50,gpm:118,nr:44},sol:"NP=50 | GPM=29.7×0.5625×7.07≈118 | NR=1.57×0.5625×50≈44 lbs",hint:"Handline NP=50. Nozzle dia=0.75\"."},
+      {id:"nr4",q:"2.5\" handline with a 1\" smooth bore nozzle. Find Nozzle Pressure, GPM, and Nozzle Reaction.",fields:[{l:"NP (psi)",k:"np"},{l:"GPM",k:"gpm"},{l:"NR (lbs)",k:"nr"}],ans:{np:50,gpm:210,nr:79},sol:"NP=50 | GPM=29.7×1×7.07≈210 | NR=1.57×1×50=78.5≈79 lbs",hint:"Handline NP=50. Nozzle dia=1\"."},
+      {id:"nr5",q:"5\" master stream with a 2\" smooth bore tip. Find Nozzle Pressure, GPM, and Nozzle Reaction.",fields:[{l:"NP (psi)",k:"np"},{l:"GPM",k:"gpm"},{l:"NR (lbs)",k:"nr"}],ans:{np:80,gpm:1062,nr:503},sol:"NP=80 | GPM=29.7×4×8.94≈1,062 | NR=1.57×4×80≈503 lbs",hint:"Master stream NP=80. Nozzle dia=2\"."},
+    ]
+  },
+  {
+    title: "Nozzle Reaction — Fog Nozzle",
+    subtitle: "NR = 0.0505 × Q × √NP",
+    refCats: ['nozzlePressures'],
+    extraRef: `<div class="ref-mini-title">Formula</div><div class="formula-pill">NR = 0.0505 × Q × √NP</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">Q = GPM flowing &nbsp;|&nbsp; NP = nozzle pressure &nbsp;|&nbsp; Fog NP = 100 psi</small>`,
+    problems: [
+      {id:"nrf1",q:"1.5\" handline flowing 100 GPM through a fog nozzle at 100 PSI.",fields:[{l:"NR (lbs)",k:"nr"}],ans:{nr:50},sol:"0.0505 × 100 × √100 = 0.0505 × 100 × 10 = 50.5 ≈ 50 lbs",hint:"NR = 0.0505 × 100 × √100"},
+      {id:"nrf2",q:"2.5\" handline flowing 250 GPM through a fog nozzle at 100 PSI.",fields:[{l:"NR (lbs)",k:"nr"}],ans:{nr:126},sol:"0.0505 × 250 × 10 = 126.25 ≈ 126 lbs",hint:"NR = 0.0505 × 250 × √100"},
+      {id:"nrf3",q:"1.75\" handline flowing 200 GPM through a fog nozzle at 100 PSI.",fields:[{l:"NR (lbs)",k:"nr"}],ans:{nr:101},sol:"0.0505 × 200 × 10 = 101 lbs",hint:"NR = 0.0505 × 200 × √100"},
+      {id:"nrf4",q:"3\" handline flowing 300 GPM through a fog nozzle at 100 PSI.",fields:[{l:"NR (lbs)",k:"nr"}],ans:{nr:152},sol:"0.0505 × 300 × 10 = 151.5 ≈ 152 lbs",hint:"NR = 0.0505 × 300 × √100"},
+      {id:"nrf5",q:"1.75\" handline flowing 150 GPM through a fog nozzle at 100 PSI.",fields:[{l:"NR (lbs)",k:"nr"}],ans:{nr:76},sol:"0.0505 × 150 × 10 = 75.75 ≈ 76 lbs",hint:"NR = 0.0505 × 150 × √100"},
+    ]
+  },
+  {
+    title: "Friction Loss — CQ²L Formula",
+    subtitle: "FL = C × Q² × L  (Q = GPM÷100, L = ft÷100)",
+    refCats: ['coefficients','appliances'],
+    extraRef: `<div class="ref-mini-title">Formula</div><div class="formula-pill">FL = C × Q² × L</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">C = coefficient from table &nbsp;|&nbsp; Q = GPM ÷ 100 &nbsp;|&nbsp; L = hose length ÷ 100</small>`,
+    problems: [
+      {id:"fl1",q:"Determine the friction loss in 200' of 3\" hose flowing 300 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:14},sol:"C=0.8, Q=3, L=2 → 0.8×9×2=14.4≈14 psi",hint:"C=0.8 for 3\". Q=300÷100=3. L=200÷100=2."},
+      {id:"fl2",q:"Determine the friction loss in 300' of 2.5\" (2½\") hose flowing 200 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:24},sol:"C=2, Q=2, L=3 → 2×4×3=24 psi",hint:"C=2 for 2.5\". Q=200÷100=2. L=300÷100=3."},
+      {id:"fl3",q:"Determine the friction loss in 200' of 1.75\" (1¾\") hose flowing 150 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:70},sol:"C=15.5, Q=1.5, L=2 → 15.5×2.25×2=69.75≈70 psi",hint:"C=15.5 for 1.75\". Q=1.5. L=2."},
+      {id:"fl4",q:"Determine the friction loss in 1,000' of 5\" hose flowing 500 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:20},sol:"C=0.08, Q=5, L=10 → 0.08×25×10=20 psi",hint:"C=0.08 for 5\". Q=5. L=10."},
+      {id:"fl5",q:"Determine the friction loss in 500' of 4\" hose flowing 300 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:9},sol:"C=0.2, Q=3, L=5 → 0.2×9×5=9 psi",hint:"C=0.2 for 4\". Q=3. L=5."},
+      {id:"fl6",q:"Determine the friction loss in 300' of 1.5\" (1½\") hose flowing 100 GPM.",fields:[{l:"FL (psi)",k:"fl"}],ans:{fl:72},sol:"C=24, Q=1, L=3 → 24×1×3=72 psi",hint:"C=24 for 1.5\". Q=1. L=3."},
+    ]
+  },
+  {
+    title: "Pump Discharge Pressure",
+    subtitle: "PDP = NP + FL + Appliance Loss + EP",
+    refCats: ['nozzlePressures','coefficients','appliances'],
+    extraRef: `<div class="ref-mini-title">Formulas</div><div class="formula-pill">PDP = NP + FL + AL + EP</div><div class="formula-pill">EP = 0.5 × H (ft)</div><div class="formula-pill">FL = C × Q² × L</div>`,
+    problems: [
+      {id:"pdp1",q:"200' of 1.75\" hose, 150 GPM fog nozzle (no elevation). Find NP, FL, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"PDP (psi)",k:"pdp"}],ans:{np:100,fl:70,pdp:170},sol:"NP=100 | FL=15.5×2.25×2=69.75≈70 | PDP=170 psi",hint:"Fog NP=100. C=15.5, Q=1.5, L=2."},
+      {id:"pdp2",q:"200' of 3\" hose, 200 GPM solid stream handline. Find NP, FL, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"PDP (psi)",k:"pdp"}],ans:{np:50,fl:6,pdp:56},sol:"NP=50 | FL=0.8×4×2=6.4≈6 | PDP=56 psi",hint:"Handline NP=50. C=0.8, Q=2, L=2."},
+      {id:"pdp3",q:"300' of 2.5\" hose, 250 GPM fog nozzle. Find NP, FL, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"PDP (psi)",k:"pdp"}],ans:{np:100,fl:38,pdp:138},sol:"NP=100 | FL=2×6.25×3=37.5≈38 | PDP=138 psi",hint:"Fog NP=100. C=2, Q=2.5, L=3."},
+      {id:"pdp4",q:"400' of 3\" hose, 300 GPM solid stream handline. Find NP, FL, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"PDP (psi)",k:"pdp"}],ans:{np:50,fl:29,pdp:79},sol:"NP=50 | FL=0.8×9×4=28.8≈29 | PDP=79 psi",hint:"Handline NP=50. C=0.8, Q=3, L=4."},
+      {id:"pdp5",q:"300' of 2.5\" fog at 200 GPM, 100' elevation. Find NP, FL, EP, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"EP (psi)",k:"ep"},{l:"PDP (psi)",k:"pdp"}],ans:{np:100,fl:24,ep:50,pdp:174},sol:"NP=100 | FL=2×4×3=24 | EP=0.5×100=50 | PDP=174 psi",hint:"Fog NP=100. C=2, Q=2, L=3. EP=0.5×100."},
+      {id:"pdp6",q:"400' of 2.5\" hose, 250 GPM solid stream handline. Find NP, FL, and PDP.",fields:[{l:"NP (psi)",k:"np"},{l:"FL (psi)",k:"fl"},{l:"PDP (psi)",k:"pdp"}],ans:{np:50,fl:50,pdp:100},sol:"NP=50 | FL=2×6.25×4=50 | PDP=100 psi",hint:"Handline NP=50. C=2, Q=2.5, L=4."},
+    ]
+  },
+  {
+    title: "Hydrant Flow from Pitot Reading",
+    subtitle: "GPM = 29.7 × D² × √Pitot",
+    refCats: ['hydrantColors'],
+    extraRef: `<div class="ref-mini-title">Formula</div><div class="formula-pill">GPM = 29.7 × D² × √NP</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">D = orifice diameter &nbsp;|&nbsp; NP = pitot gauge reading (psi)</small>`,
+    problems: [
+      {id:"hyd1",q:"GPM from a hydrant's 2.5\" orifice with a pitot reading of 25 PSI.",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:928},sol:"29.7 × 6.25 × 5 = 928 GPM",hint:"GPM = 29.7 × 2.5² × √25 = 29.7 × 6.25 × 5"},
+      {id:"hyd2",q:"GPM from a hydrant's 2.5\" orifice with a pitot reading of 36 PSI.",fields:[{l:"GPM",k:"gpm"}],ans:{gpm:1114},sol:"29.7 × 6.25 × 6 = 1,114 GPM",hint:"GPM = 29.7 × 2.5² × √36 = 29.7 × 6.25 × 6"},
+    ]
+  },
+  {
+    title: "Pool Capacity",
+    subtitle: "Rect: 7.5×L×W×D  |  Round: 7.5×π×r²×D",
+    refCats: [],
+    extraRef: `<div class="ref-mini-title">Formulas</div><div class="formula-pill">Rect: C = 7.5 × L × W × D</div><div class="formula-pill">Round: C = 7.5 × π × r² × D</div><br><small style="color:#aed6f1;font-size:12px;line-height:1.8;">π = 3.14 &nbsp;|&nbsp; r = radius = diameter ÷ 2 &nbsp;|&nbsp; 7.5 = gal/ft³</small>`,
+    problems: [
+      {id:"pool1",q:"Rectangular pool: 18' × 36', average depth 5'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:24300},sol:"7.5 × 18 × 36 × 5 = 24,300 gallons",hint:"C = 7.5 × 18 × 36 × 5"},
+      {id:"pool2",q:"Rectangular pool: 40' × 100', average depth 6'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:180000},sol:"7.5 × 40 × 100 × 6 = 180,000 gallons",hint:"C = 7.5 × 40 × 100 × 6"},
+      {id:"pool3",q:"Rectangular pool: 10' × 20', average depth 4'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:6000},sol:"7.5 × 10 × 20 × 4 = 6,000 gallons",hint:"C = 7.5 × 10 × 20 × 4"},
+      {id:"pool4",q:"Round pool: 24' diameter (r = 12'), average depth 4'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:13564},sol:"7.5 × 3.14 × 144 × 4 = 13,564 gallons",hint:"r=12. C = 7.5 × 3.14 × 12² × 4"},
+      {id:"pool5",q:"Round pool: 52' diameter (r = 26'), average depth 4'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:63645},sol:"7.5 × 3.14 × 676 × 4 ≈ 63,645 gallons",hint:"r=26. C = 7.5 × 3.14 × 26² × 4"},
+      {id:"pool6",q:"Round pool: 36' diameter (r = 18'), average depth 4'. How many gallons?",fields:[{l:"Gallons",k:"gal"}],ans:{gal:30536},sol:"7.5 × 3.14 × 324 × 4 ≈ 30,536 gallons",hint:"r=18. C = 7.5 × 3.14 × 18² × 4"},
+    ]
+  },
+];
+
+// =====================================================================
+// MATH STATE
+// =====================================================================
+const solved = {};    // probId -> true
+const activePi = {};  // ci -> current problem index
+const calcState = {}; // uid -> {display, expr}
+
+function buildMathAccordions() {
+  const container = document.getElementById('mathAccordions');
+  container.innerHTML = mathCategories.map((cat, ci) => {
+    activePi[ci] = 0;
+    const dots = cat.problems.map((p,pi) =>
+      `<button class="prob-dot ${pi===0?'active':''}" id="dot_${ci}_${pi}" onclick="showProblem(${ci},${pi})">${pi+1}</button>`
+    ).join('');
+    return `
+    <div class="math-accordion">
+      <div class="math-accordion-header" id="acc_h_${ci}" onclick="toggleAcc(${ci})">
+        <div>
+          <span>${cat.title}</span>
+          <span class="acc-meta"> — ${cat.subtitle}</span>
+        </div>
+        <div class="acc-right">
+          <span class="acc-score" id="acc_score_${ci}">0/${cat.problems.length}</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+      </div>
+      <div class="math-accordion-body" id="acc_b_${ci}">
+        <div class="prob-navigator">
+          <span class="prob-nav-label">Problem:</span>
+          ${dots}
+        </div>
+        <div class="prob-card" id="prob_card_${ci}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  mathCategories.forEach((_, ci) => renderProblem(ci, 0));
+}
+
+function toggleAcc(ci) {
+  const body = document.getElementById(`acc_b_${ci}`);
+  const head = document.getElementById(`acc_h_${ci}`);
+  const opening = !body.classList.contains('open');
+  body.classList.toggle('open', opening);
+  head.classList.toggle('open', opening);
+}
+
+function showProblem(ci, pi) {
+  const cat = mathCategories[ci];
+  // update dots
+  cat.problems.forEach((p, idx) => {
+    const dot = document.getElementById(`dot_${ci}_${idx}`);
+    dot.classList.remove('active');
+    dot.classList.toggle('solved', !!solved[p.id]);
+  });
+  const activeDot = document.getElementById(`dot_${ci}_${pi}`);
+  activeDot.classList.add('active');
+  activeDot.classList.remove('solved');
+  activePi[ci] = pi;
+  renderProblem(ci, pi);
+}
+
+function renderProblem(ci, pi) {
+  const cat = mathCategories[ci];
+  const prob = cat.problems[pi];
+  const uid = `${ci}_${pi}`;
+  const isSolved = !!solved[prob.id];
+
+  const refHTML = makeRefHTML(cat.refCats, cat.extraRef);
+  const calcHTML = buildCalcHTML(uid);
+
+  const fieldsHTML = prob.fields.map(f =>
+    `<div class="math-field">
+      <label>${f.l}</label>
+      <input type="number" id="minp_${prob.id}_${f.k}" placeholder="?" ${isSolved ? `value="${prob.ans[f.k].toLocaleString().replace(/,/g,'')}" class="correct"` : ''} />
+    </div>`
+  ).join('');
+
+  const nextBtn = pi < cat.problems.length - 1
+    ? `<button class="btn btn-secondary" onclick="showProblem(${ci},${pi+1})">Next →</button>` : '';
+
+  document.getElementById(`prob_card_${ci}`).innerHTML = `
+    <div class="prob-question">${prob.q}</div>
+    <div class="prob-tools">
+      <button class="tool-toggle" id="reftog_${uid}" onclick="toggleTool('refp_${uid}','reftog_${uid}')">📖 Reference</button>
+      <button class="tool-toggle" id="calctog_${uid}" onclick="toggleTool('calcp_${uid}','calctog_${uid}')">🧮 Calculator</button>
+    </div>
+    <div class="tool-panel" id="refp_${uid}">${refHTML}</div>
+    <div class="tool-panel" id="calcp_${uid}">${calcHTML}</div>
+    <div class="math-input-row">${fieldsHTML}</div>
+    <div class="math-result ${isSolved ? 'show correct' : ''}" id="mres_${prob.id}">${isSolved ? '✓ Correct! ' + prob.sol : ''}</div>
+    <div class="prob-btn-row">
+      <button class="btn btn-orange" onclick="checkMath('${prob.id}',${ci},${pi})">Check Answer</button>
+      <button class="btn btn-blue" onclick="showHint('${prob.id}','${prob.hint.replace(/'/g,"\\'").replace(/"/g,"&quot;")}')">💡 Hint</button>
+      ${nextBtn}
+    </div>`;
+}
+
+function toggleTool(panelId, btnId) {
+  const panel = document.getElementById(panelId);
+  const btn = document.getElementById(btnId);
+  const opening = !panel.classList.contains('open');
+  panel.classList.toggle('open', opening);
+  btn.classList.toggle('active', opening);
+}
+
+function checkMath(probId, ci, pi) {
+  const prob = mathCategories[ci].problems[pi];
+  const result = document.getElementById(`mres_${probId}`);
+  let allOk = true;
+  let wrong = [];
+
+  prob.fields.forEach(f => {
+    const inp = document.getElementById(`minp_${probId}_${f.k}`);
+    const user = parseFloat(inp.value);
+    const correct = prob.ans[f.k];
+    const tol = Math.max(2, Math.abs(correct * 0.015));
+    const ok = !isNaN(user) && Math.abs(user - correct) <= tol;
+    inp.className = ok ? 'correct' : 'incorrect';
+    if (!ok) { allOk = false; wrong.push(`${f.l} = ${correct.toLocaleString()}`); }
+  });
+
+  if (allOk) {
+    result.className = 'math-result show correct';
+    result.innerHTML = `✓ Correct! &nbsp;<span style="font-size:13px;opacity:0.85;">${prob.sol}</span>`;
+    solved[probId] = true;
+    document.getElementById(`dot_${ci}_${pi}`).classList.add('solved');
+    updateAccScore(ci);
+  } else {
+    result.className = 'math-result show incorrect';
+    result.innerHTML = `✗ Not quite. Correct: ${wrong.join(' | ')}<br><small style="opacity:0.85;">${prob.sol}</small>`;
+  }
+}
+
+function showHint(probId, hint) {
+  const result = document.getElementById(`mres_${probId}`);
+  result.className = 'math-result show hint';
+  result.innerHTML = `💡 ${hint}`;
+}
+
+function updateAccScore(ci) {
+  const cat = mathCategories[ci];
+  const n = cat.problems.filter(p => solved[p.id]).length;
+  const el = document.getElementById(`acc_score_${ci}`);
+  el.textContent = `${n}/${cat.problems.length}`;
+  if (n === cat.problems.length) el.style.color = 'var(--success)';
+}
+
+// =====================================================================
+// CALCULATOR
+// =====================================================================
+function buildCalcHTML(uid) {
+  calcState[uid] = { display: '0', expr: '', justEvaled: false };
+  return `
+  <div class="calc-grid">
+    <div class="calc-display" id="cd_${uid}">0</div>
+    <button class="calc-btn clr span2" onclick="co('${uid}','C')">C</button>
+    <button class="calc-btn op" onclick="co('${uid}','sqrt')">√x</button>
+    <button class="calc-btn op" onclick="co('${uid}','sq')">x²</button>
+    <button class="calc-btn" onclick="co('${uid}','7')">7</button>
+    <button class="calc-btn" onclick="co('${uid}','8')">8</button>
+    <button class="calc-btn" onclick="co('${uid}','9')">9</button>
+    <button class="calc-btn op" onclick="co('${uid}','/')">÷</button>
+    <button class="calc-btn" onclick="co('${uid}','4')">4</button>
+    <button class="calc-btn" onclick="co('${uid}','5')">5</button>
+    <button class="calc-btn" onclick="co('${uid}','6')">6</button>
+    <button class="calc-btn op" onclick="co('${uid}','*')">×</button>
+    <button class="calc-btn" onclick="co('${uid}','1')">1</button>
+    <button class="calc-btn" onclick="co('${uid}','2')">2</button>
+    <button class="calc-btn" onclick="co('${uid}','3')">3</button>
+    <button class="calc-btn op" onclick="co('${uid}','-')">−</button>
+    <button class="calc-btn" onclick="co('${uid}','0')">0</button>
+    <button class="calc-btn" onclick="co('${uid}','.')">.</button>
+    <button class="calc-btn eq" onclick="co('${uid}','=')">＝</button>
+    <button class="calc-btn op" onclick="co('${uid}','+')">+</button>
+  </div>
+  <div class="calc-history" id="ch_${uid}"></div>`;
+}
+
+function co(uid, op) {
+  const disp = document.getElementById(`cd_${uid}`);
+  const hist = document.getElementById(`ch_${uid}`);
+  const s = calcState[uid];
+  if (!s) return;
+
+  if (op === 'C') {
+    s.display = '0'; s.expr = ''; s.justEvaled = false;
+    disp.textContent = '0'; return;
+  }
+  if (op === 'sqrt') {
+    const v = parseFloat(s.display);
+    const r = +(Math.sqrt(v).toFixed(6));
+    hist.innerHTML = `√${v} = ${r}<br>` + hist.innerHTML;
+    s.display = String(r); s.expr = String(r); s.justEvaled = true;
+    disp.textContent = r; return;
+  }
+  if (op === 'sq') {
+    const v = parseFloat(s.display);
+    const r = +(v*v).toFixed(6);
+    hist.innerHTML = `${v}² = ${r}<br>` + hist.innerHTML;
+    s.display = String(r); s.expr = String(r); s.justEvaled = true;
+    disp.textContent = r; return;
+  }
+  if (op === '=') {
+    try {
+      const r = +(Function('"use strict";return('+s.expr+s.display+')')().toFixed(6));
+      hist.innerHTML = `${s.expr}${s.display} = ${r}<br>` + hist.innerHTML;
+      s.display = String(r); s.expr = ''; s.justEvaled = true;
+      disp.textContent = r;
+    } catch(e) { disp.textContent = 'Err'; s.expr=''; s.display='0'; }
+    return;
+  }
+  if (['+','-','*','/'].includes(op)) {
+    s.expr += s.display + op;
+    s.display = '0'; s.justEvaled = false;
+    const sym = {'+':'+','-':'−','*':'×','/':'÷'}[op];
+    disp.textContent = s.expr.replace(/\*/g,'×').replace(/\//g,'÷').replace(/-/g,'−') + ' ' + sym;
+    return;
+  }
+  // digit or dot
+  if (s.justEvaled && /[0-9.]/.test(op)) { s.display = op === '.' ? '0.' : op; s.justEvaled = false; }
+  else if (s.display === '0' && op !== '.') { s.display = op; }
+  else { s.display += op; }
+  const exprDisp = s.expr.replace(/\*/g,'×').replace(/\//g,'÷');
+  disp.textContent = exprDisp ? exprDisp + s.display : s.display;
+}
+
+// =====================================================================
+// FLASHCARD LOGIC
+// =====================================================================
+let currentCards = [...allQuestions];
+let currentCardIndex = 0;
+
+function filterCategory() {
+  const cat = document.getElementById('categoryFilter').value;
+  currentCards = cat === 'all' ? [...allQuestions] : allQuestions.filter(q => q.cat === cat);
+  currentCardIndex = 0; showCard();
+}
+function shuffleCards() {
+  for (let i = currentCards.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [currentCards[i],currentCards[j]] = [currentCards[j],currentCards[i]];
+  }
+  currentCardIndex = 0; showCard();
+}
+function resetCards() {
+  currentCards = [...allQuestions];
+  currentCardIndex = 0;
+  document.getElementById('categoryFilter').value = 'all';
+  showCard();
+}
+function showCard() {
+  const c = currentCards[currentCardIndex];
+  document.getElementById('cardQuestion').textContent = c.q;
+  document.getElementById('cardAnswer').textContent = c.a;
+  document.getElementById('cardCounter').textContent = `Card ${currentCardIndex+1} of ${currentCards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('flashProgress').style.width = ((currentCardIndex+1)/currentCards.length*100)+'%';
+}
+function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard() { if (currentCardIndex < currentCards.length-1) { currentCardIndex++; showCard(); } }
+function prevCard() { if (currentCardIndex > 0) { currentCardIndex--; showCard(); } }
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('flashcards').classList.contains('active')) return;
+  if (e.key==='ArrowRight') nextCard();
+  else if (e.key==='ArrowLeft') prevCard();
+  else if (e.key===' ') { e.preventDefault(); flipCard(); }
+});
+
+// =====================================================================
+// QUIZ LOGIC
+// =====================================================================
+let quizQs=[], quizIdx=0, quizScore=0, quizAnswered=false;
+function startQuiz(n) {
+  quizQs = [...allQuestions].sort(()=>Math.random()-0.5).slice(0,n);
+  quizIdx=0; quizScore=0;
+  document.getElementById('quizStart').style.display='none';
+  document.getElementById('quizResults').style.display='none';
+  document.getElementById('quizGame').style.display='block';
+  showQuestion();
+}
+function showQuestion() {
+  quizAnswered=false;
+  document.getElementById('nextQBtn').style.display='none';
+  document.getElementById('mcFeedback').className='mc-feedback';
+  const q = quizQs[quizIdx];
+  document.getElementById('mcQuestion').textContent = q.q;
+  document.getElementById('quizCounter').textContent = `Question ${quizIdx+1} of ${quizQs.length}  •  Score: ${quizScore}`;
+  document.getElementById('quizProgress').style.width = (quizIdx/quizQs.length*100)+'%';
+  const others = allQuestions.filter(x=>x.a!==q.a).sort(()=>Math.random()-0.5).slice(0,3);
+  const opts = [q.a,...others.map(o=>o.a)].sort(()=>Math.random()-0.5);
+  const div = document.getElementById('mcOptions');
+  div.innerHTML='';
+  opts.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='mc-option'; b.textContent=opt;
+    b.onclick=()=>selectAnswer(b,opt,q.a);
+    div.appendChild(b);
+  });
+}
+function selectAnswer(btn,chosen,correct) {
+  if (quizAnswered) return;
+  quizAnswered=true;
+  document.querySelectorAll('.mc-option').forEach(b=>{b.disabled=true; if(b.textContent===correct)b.classList.add('correct');});
+  const fb=document.getElementById('mcFeedback');
+  if (chosen===correct) { btn.classList.add('correct'); fb.textContent='✓ Correct!'; fb.className='mc-feedback show correct'; quizScore++; }
+  else { btn.classList.add('incorrect'); fb.textContent=`✗ Incorrect. Answer: ${correct}`; fb.className='mc-feedback show incorrect'; }
+  document.getElementById('nextQBtn').style.display='inline-block';
+}
+function nextQuestion() {
+  if (++quizIdx >= quizQs.length) showResults(); else showQuestion();
+}
+function showResults() {
+  document.getElementById('quizGame').style.display='none';
+  document.getElementById('quizResults').style.display='block';
+  const pct=Math.round(quizScore/quizQs.length*100);
+  document.getElementById('finalScore').textContent=pct+'%';
+  document.getElementById('finalDetail').textContent=`${quizScore} correct out of ${quizQs.length}`;
+  document.getElementById('headerScore').textContent=`Last Quiz: ${pct}%`;
+}
+function resetQuiz() {
+  document.getElementById('quizStart').style.display='block';
+  document.getElementById('quizResults').style.display='none';
+  document.getElementById('quizGame').style.display='none';
+}
+
+// =====================================================================
+// NAV
+// =====================================================================
+function showSection(name, tab) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  if (tab) tab.classList.add('active');
+}
+
+// INIT
+showCard();
+buildMathAccordions();
+</script>
+</body>
+</html>
